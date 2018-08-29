@@ -1,0 +1,29 @@
+clone:
+  git:
+    image: plugins/git
+
+pipeline:
+
+  backend:
+    image: reg.mritd.me/base/build:2.1.5
+    commands:
+      - mvn clean install
+    when:
+      branch:
+        event: [ push, pull_request ]
+        include: [ master ]
+        exclude: [ develop ]
+
+#  rebuild-cache:
+#    image: drillster/drone-volume-cache
+#    rebuild: true
+#    mount:
+#      - ./build
+#    volumes:
+#      - /data/drone/$DRONE_COMMIT_SHA:/cache
+
+
+# Pipeline Conditions
+branches:
+  include: [ master, feature/* ]
+  exclude: [ develop, test/* ]
